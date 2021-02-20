@@ -1,0 +1,76 @@
+@charset "UTF-8";
+/*@namespace html url(http://www.w3.org/1999/xhtml);*/
+/*@namespace o url(http://oup.dataformat.com/doc/OUP_DTD_Dictionary.html);*/
+@namespace d url(http://www.apple.com/DTDs/DictionaryService-1.0.rng);
+
+/*==== HTML ====*/
+
+body {
+    font-size: 12pt;
+    font: -apple-system-body;
+    font-family: -apple-system;
+    margin-left: 0.9em;
+    margin-right: 0.9em;
+    margin-top: 1.0em;
+    margin-bottom: 1.5em;
+
+    color: text;
+}
+
+html.apple_client-panel body {
+    margin-top: 0em;
+}
+
+@media (prefers-dark-interface)
+{
+    img {
+        filter: invert(100%);
+    }
+}
+
+a {
+    color: -webkit-link;
+    text-decoration: none;
+}
+
+a:hover {
+    color: -webkit-link;
+    text-decoration: underline;
+}
+
+html.apple_client-panel a,
+html.apple_client-panel a:hover {
+    color: text;
+    text-decoration: none;
+}
+
+*.entry {
+    display: block;
+    font-size: 84%;
+    margin-bottom: 4em;
+    line-height: 130%;
+}
+
+h1 {
+    font-size: 170%;
+    font-weight: normal;
+
+}
+
+h1 small {
+  font-size: 80%;
+  font-weight: normal;
+  color: #515151;
+  color: -apple-system-label;
+}
+
+h2 {
+    font-size: 130%;
+    font-weight: normal;
+}
+
+
+i {
+  color: #003300;
+  color: -apple-system-green;
+}

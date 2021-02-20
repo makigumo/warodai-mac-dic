@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>DCSDictionaryNativeDisplayName</key>
+        <string>Japanese-Russian</string>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleIdentifier</key>
+        <string>com.github.makigumo.warodai.mac</string>
+        <key>CFBundleName</key>
+        <string>Warodai</string>
+        <key>CFBundleDisplayName</key>
+        <string>Warodai</string>
+        <key>CFBundleShortVersionString</key>
+        <string>VERSION_DATE</string>
+        <key>DCSDictionaryCopyright</key>
+        <string>© Copyright YEAR, Warodai</string>
+        <key>DCSDictionaryManufacturerName</key>
+        <string>https://warodai.ru/</string>
+        <key>DCSDictionaryLanguages</key>
+        <array>
+            <dict>
+                <key>DCSDictionaryDescriptionLanguage</key>
+                <string>ru</string>
+                <key>DCSDictionaryIndexLanguage</key>
+                <string>ja</string>
+            </dict>
+        </array>
+        <key>DCSDictionaryPrimaryLanguage</key>
+        <string>ru</string>
+        <key>DCSElementXPath</key>
+        <dict>
+            <key>pos</key>
+            <string>//span[contains(@class,&quot;pos&quot;)][1]</string>
+            <key>pronunciation</key>
+            <string>//h2[1]</string>
+            <key>definitions</key>
+            <string>//*[contains(@class,&quot;senses&quot;)][1]</string>
+        </dict>
+        <key>DCSDictionaryUseSystemAppearance</key>
+        <true/>
+    </dict>
+</plist>
+

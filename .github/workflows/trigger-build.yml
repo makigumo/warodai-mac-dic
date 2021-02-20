@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Clone DDK
+      run: |
+        git clone https://github.com/SebastianSzturo/Dictionary-Development-Kit.git "$HOME"/'Dictionary Development Kit'
+    - name: Clone Warodai
+      run: |
+        git clone --depth=1 https://github.com/warodai/warodai-source.git "$HOME"/'warodai-source'
+    - name: Transform Warodai to Apple dictionary XML
+      run: |
+        ./make-dict-xml.py "$HOME"/'warodai-source' > warodai.xml
+    - name: Prepare plist file
+      run: |
+        cat Warodai.plist.in | m4 -DYEAR=$(date +%Y) -DVERSION_DATE=$(date +%Y.%m.%d) > Warodai.plist
+    - name: Build dictionary
+      run: |
+        make
+    - name: Package dictionary
+      run: |
+        hdiutil create tmp.dmg -ov -volname "Warodai" -fs HFS+ -srcfolder "./objects/Warodai.dictionary"
+        hdiutil convert tmp.dmg -format UDZO -o Warodai.dmg
+    - name: Cleanup
+      run: |
+        make clean
+        rm tmp.dmg
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y%m%d')"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.date.outputs.date }}
+        release_name: ${{ steps.date.outputs.date }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./Warodai.dmg
+        asset_name: Warodai.dmg
+        asset_content_type: application/x-apple-diskimage
