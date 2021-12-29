@@ -77,47 +77,59 @@ def get_entry_xml_from(path) -> str:
     file_id = pathlib.Path(path).stem
     with io.open(path, mode='r', encoding='utf-8') as f:
         lines = f.readlines()
-        # しょしょ【処々･所々･諸所･処処･所所】(сёсё)〔004-99-20〕
-        # TODO ちょうへん, ちょうへんしょうせつ【長篇･長編, 長篇小説･長編小説】(тё:хэн, тё:хэн-сё:сэцу)〔009-26-70〕
+        # とうきょう【東京】(То:кё:) [геогр.]〔005-28-71〕
         # TODO リューチューとう【リューチュー島･琉球島】(Рю:тю:-то:) [геогр.]〔008-71-42〕
-        header = re.search('^(.+?)【(.+?)】\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+        header = re.search('^(.+?)【(.+?)】\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
         if header:
-            (hiragana, kanji, transcription) = header.groups()[0:-1]
+            (hiragana, kanji, transcription, domain) = header.groups()[0:-1]
             title = f"{hiragana}【{kanji}】"
             index_xml = get_index_xml(hiragana, title)
             for k in kanji.split('･'):
                 index_xml += get_index_xml(k, k, hiragana)
-            return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]))
+            return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain)
         else:
-            # カルカッタ(Карукатта) [геогр.]〔000-28-00〕
-            # TODO ケソン, ケソン・シティー(Кэсон, Кэсон-Сити:) [геогр.]〔005-06-52〕
-            header = re.search('^(.+?)\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+            # しょしょ【処々･所々･諸所･処処･所所】(сёсё)〔004-99-20〕
+            # TODO ちょうへん, ちょうへんしょうせつ【長篇･長編, 長篇小説･長編小説】(тё:хэн, тё:хэн-сё:сэцу)〔009-26-70〕
+            header = re.search('^(.+?)【(.+?)】\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
             if header:
-                (katakana, transcription, domain) = header.groups()[0:-1]
-                title = f"{katakana}"
-                index_xml = ""
-                index_xml += get_index_xml(katakana, title)
-                if "・" in katakana:
-                    index_xml += get_index_xml(katakana.replace("・", ""), title)
-                # TODO add hiragana to index
-                return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain)
+                (hiragana, kanji, transcription) = header.groups()[0:-1]
+                title = f"{hiragana}【{kanji}】"
+                index_xml = get_index_xml(hiragana, title)
+                for k in kanji.split('･'):
+                    index_xml += get_index_xml(k, k, hiragana)
+                return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]))
             else:
-                # ボヘミア(бохэмиа)〔000-40-00〕
-                # TODO :スプリント, スプリント・レース(сўпуринто, сўпуринто-рэ:су)〔003-01-61〕
-                header = re.search('^(.+?)\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+                # カルカッタ(Карукатта) [геогр.]〔000-28-00〕
+                # TODO ケソン, ケソン・シティー(Кэсон, Кэсон-Сити:) [геогр.]〔005-06-52〕
+                header = re.search('^(.+?)\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
                 if header:
-                    (katakana, transcription) = header.groups()[0:-1]
+                    (katakana, transcription, domain) = header.groups()[0:-1]
                     title = f"{katakana}"
                     index_xml = ""
                     index_xml += get_index_xml(katakana, title)
                     if "・" in katakana:
                         index_xml += get_index_xml(katakana.replace("・", ""), title)
                     # TODO add hiragana to index
-                    return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]))
+                    if file_id == "005-28-71":
+                        sys.stderr.write(get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain))
+                    return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain)
                 else:
-                    print("regex mismatch")
-                    print(lines)
-                    exit(1)
+                    # ボヘミア(бохэмиа)〔000-40-00〕
+                    # TODO :スプリント, スプリント・レース(сўпуринто, сўпуринто-рэ:су)〔003-01-61〕
+                    header = re.search('^(.+?)\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+                    if header:
+                        (katakana, transcription) = header.groups()[0:-1]
+                        title = f"{katakana}"
+                        index_xml = ""
+                        index_xml += get_index_xml(katakana, title)
+                        if "・" in katakana:
+                            index_xml += get_index_xml(katakana.replace("・", ""), title)
+                        # TODO add hiragana to index
+                        return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]))
+                    else:
+                        print("regex mismatch")
+                        print(lines)
+                        exit(1)
         return None
 
 
