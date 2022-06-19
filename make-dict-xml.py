@@ -39,17 +39,17 @@ def get_lines_xml(lines: list[str]) -> str:
             is_list = True
             ret += f"""<div class="list">{line}</div>"""
         elif line.startswith('～'):
-            match = re.search('^(～.+?) .+', line)
+            match = re.search(r'^(～.+?) .+', line)
             if match:
                 line = line.replace(match.group(1), f"<b>{match.group(1)}</b>")
             ret += f"""<div>{line}</div>"""
         elif line.startswith(': ～'):
-            match = re.search('^: (～.+?) .+', line)
+            match = re.search(r'^: (～.+?) .+', line)
             if match:
                 line = line.replace(match.group(1), f"<b>{match.group(1)}</b>")
             ret += f"""<div>{line}</div>"""
-        elif re.match('\d+\): (～.+?) .+', line):
-            match = re.search('\d+\): (～.+?) .+', line)
+        elif re.match(r'\d+\): (～.+?) .+', line):
+            match = re.search(r'\d+\): (～.+?) .+', line)
             if match:
                 line = line.replace(match.group(1), f"<b>{match.group(1)}</b>")
             ret += f"""<div>{line}</div>"""
@@ -79,7 +79,7 @@ def get_entry_xml_from(path) -> str:
         lines = f.readlines()
         # とうきょう【東京】(То:кё:) [геогр.]〔005-28-71〕
         # TODO リューチューとう【リューチュー島･琉球島】(Рю:тю:-то:) [геогр.]〔008-71-42〕
-        header = re.search('^(.+?)【(.+?)】\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+        header = re.search(r'^(.+?)【(.+?)】\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
         if header:
             (hiragana, kanji, transcription, domain) = header.groups()[0:-1]
             title = f"{hiragana}【{kanji}】"
@@ -90,7 +90,7 @@ def get_entry_xml_from(path) -> str:
         else:
             # しょしょ【処々･所々･諸所･処処･所所】(сёсё)〔004-99-20〕
             # TODO ちょうへん, ちょうへんしょうせつ【長篇･長編, 長篇小説･長編小説】(тё:хэн, тё:хэн-сё:сэцу)〔009-26-70〕
-            header = re.search('^(.+?)【(.+?)】\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+            header = re.search(r'^(.+?)【(.+?)】\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
             if header:
                 (hiragana, kanji, transcription) = header.groups()[0:-1]
                 title = f"{hiragana}【{kanji}】"
@@ -101,7 +101,7 @@ def get_entry_xml_from(path) -> str:
             else:
                 # カルカッタ(Карукатта) [геогр.]〔000-28-00〕
                 # TODO ケソン, ケソン・シティー(Кэсон, Кэсон-Сити:) [геогр.]〔005-06-52〕
-                header = re.search('^(.+?)\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+                header = re.search(r'^(.+?)\((.+?)\) \[(.+?)]〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
                 if header:
                     (katakana, transcription, domain) = header.groups()[0:-1]
                     title = f"{katakana}"
@@ -116,7 +116,7 @@ def get_entry_xml_from(path) -> str:
                 else:
                     # ボヘミア(бохэмиа)〔000-40-00〕
                     # TODO :スプリント, スプリント・レース(сўпуринто, сўпуринто-рэ:су)〔003-01-61〕
-                    header = re.search('^(.+?)\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+                    header = re.search(r'^(.+?)\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
                     if header:
                         (katakana, transcription) = header.groups()[0:-1]
                         title = f"{katakana}"
