@@ -62,7 +62,8 @@ def get_lines_xml(lines: list[str]) -> str:
     return ret
 
 
-def get_entry_xml(title: str, file_id: str, index_xml: str, transcription: str, content: str, domain: str = None) -> str:
+def get_entry_xml(title: str, file_id: str, index_xml: str, transcription: str, content: str,
+                  domain: str = None) -> str:
     return f"""<d:entry id="{file_id}" d:title="{title}">
         {index_xml}
         <div class="entry">
@@ -91,6 +92,9 @@ def get_entry_xml_from(path) -> str:
             # しょしょ【処々･所々･諸所･処処･所所】(сёсё)〔004-99-20〕
             # TODO ちょうへん, ちょうへんしょうせつ【長篇･長編, 長篇小説･長編小説】(тё:хэн, тё:хэн-сё:сэцу)〔009-26-70〕
             header = re.search(r'^(.+?)【(.+?)】\((.+?)\)〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+            if not header:
+                # leniently handle format errors
+                header = re.search(r'^(.+?)【(.+?)】\((.+?)\)\s*〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
             if header:
                 (hiragana, kanji, transcription) = header.groups()[0:-1]
                 title = f"{hiragana}【{kanji}】"
@@ -111,7 +115,9 @@ def get_entry_xml_from(path) -> str:
                         index_xml += get_index_xml(katakana.replace("・", ""), title)
                     # TODO add hiragana to index
                     if file_id == "005-28-71":
-                        sys.stderr.write(get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain))
+                        print(
+                            get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain),
+                            file=sys.stderr)
                     return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]), domain)
                 else:
                     # ボヘミア(бохэмиа)〔000-40-00〕
@@ -130,7 +136,7 @@ def get_entry_xml_from(path) -> str:
                         print("regex mismatch", file=sys.stderr)
                         print(lines, file=sys.stderr)
                         exit(2)
-       return None
+        return None
 
 
 def iterate_files(path) -> None:
