@@ -95,6 +95,9 @@ def get_entry_xml_from(path) -> str:
             if not header:
                 # leniently handle format errors
                 header = re.search(r'^(.+?)【(.+?)】\((.+?)\)\s*〔(\d{3}-\d{2}-\d{2})〕$', lines[0])
+                if header:
+                    print("format error detected", file=sys.stderr)
+                    print(lines, file=sys.stderr)
             if header:
                 (hiragana, kanji, transcription) = header.groups()[0:-1]
                 title = f"{hiragana}【{kanji}】"
