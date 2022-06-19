@@ -33,7 +33,7 @@ def get_lines_xml(lines: list[str]) -> str:
     ret = ""
     for line in lines:
         # fixup links
-        line = line.replace('href="#', 'href="x-dictionary:d:')
+        line = line.replace('href="#', 'href="x-dictionary:r:')
         # add some decorations
         if line.startswith('1.'):
             is_list = True
@@ -70,7 +70,7 @@ def get_entry_xml(title: str, file_id: str, index_xml: str, transcription: str, 
         {'''<p class="domain">[''' + domain + "]</p>" if domain else ""}
         <p>{content}</p>
         </div>
-        </d:entry>"""          
+        </d:entry>"""
 
 
 def get_entry_xml_from(path) -> str:
