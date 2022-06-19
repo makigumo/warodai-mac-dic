@@ -127,10 +127,10 @@ def get_entry_xml_from(path) -> str:
                         # TODO add hiragana to index
                         return get_entry_xml(title, file_id, index_xml, transcription, get_lines_xml(lines[1:]))
                     else:
-                        print("regex mismatch")
-                        print(lines)
-                        exit(1)
-        return None
+                        print("regex mismatch", file=sys.stderr)
+                        print(lines, file=sys.stderr)
+                        exit(2)
+       return None
 
 
 def iterate_files(path) -> None:
