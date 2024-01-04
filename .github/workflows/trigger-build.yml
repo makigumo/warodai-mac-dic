@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Clone DDK
       run: |
         git clone https://github.com/SebastianSzturo/Dictionary-Development-Kit.git "$HOME"/'Dictionary Development Kit'
@@ -39,24 +39,11 @@ jobs:
         rm tmp.dmg
     - name: Get current date
       id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d')"
+      run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ steps.date.outputs.date }}
-        release_name: ${{ steps.date.outputs.date }}
-        draft: false
-        prerelease: false
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Warodai.dmg
-        asset_name: Warodai.dmg
-        asset_content_type: application/x-apple-diskimage
+        tag: ${{ steps.date.outputs.date }}
+        artifacts: ./Warodai.dmg
+        artifactContentType: application/x-apple-diskimage
+        token: ${{ secrets.GITHUB_TOKEN }}
