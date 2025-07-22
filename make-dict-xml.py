@@ -125,12 +125,13 @@ def get_entry_xml_from(path: str) -> str:
             if len(kanjis_split) > len(transcriptions_split):
                 transcriptions_split = [transcriptions_split[0]] * len(kanjis_split)
 
-            hiraganas_split = [x for xs in
-                               ([h, katakana_to_hiragana(h)] if contains_katakana(h) else h for h in hiraganas_split)
-                               for x in xs]
+            hiraganas_extended = [x for xs in
+                                  ([h, katakana_to_hiragana(h)] if contains_katakana(h) else h for h in hiraganas_split)
+                                  for x in xs]
 
+            titles = [f"{hiraganas_split[i]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
             index_xml = set()
-            for hiragana in hiraganas_split:
+            for hiragana in hiraganas_extended:
                 for kanji in kanjis_split:
                     title = f"{hiragana}【{kanji}】"
                     index_xml.add(get_index_xml(hiragana, title))
@@ -138,7 +139,7 @@ def get_entry_xml_from(path: str) -> str:
                         index_xml.add(get_index_xml(k, k, hiragana))
                         index_xml.add(get_index_xml(k, title, hiragana))
 
-            return get_entry_xml(kanjis_split, file_id, index_xml, transcriptions_split, get_lines_xml(lines[1:]), domain)
+            return get_entry_xml(titles, file_id, index_xml, transcriptions_split, get_lines_xml(lines[1:]), domain)
         else:
             # しょしょ【処々･所々･諸所･処処･所所】(сёсё)〔004-99-20〕
             # ちょうへん, ちょうへんしょうせつ【長篇･長編, 長篇小説･長編小説】(тё:хэн, тё:хэн-сё:сэцу)〔009-26-70〕
@@ -166,6 +167,7 @@ def get_entry_xml_from(path: str) -> str:
                 if len(kanjis_split) > len(transcriptions_split):
                     transcriptions_split = [transcriptions_split[0]] * len(kanjis_split)
 
+                titles = [f"{hiraganas_split[i]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
                 index_xml = set()
                 for hiragana in hiraganas_split:
                     for kanji in kanjis_split:
@@ -173,7 +175,7 @@ def get_entry_xml_from(path: str) -> str:
                         index_xml.add(get_index_xml(hiragana, title))
                         for k in kanji.split('･'):
                             index_xml.add(get_index_xml(k, k, hiragana))
-                return get_entry_xml(kanjis_split, file_id, index_xml, transcriptions_split,
+                return get_entry_xml(titles, file_id, index_xml, transcriptions_split,
                                      get_lines_xml(lines[1:]))
             else:
                 # カルカッタ(Карукатта) [геогр.]〔000-28-00〕
