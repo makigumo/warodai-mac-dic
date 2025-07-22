@@ -35,15 +35,15 @@ RM			=	/bin/rm
 
 ###########################
 
-all: Warodai.plist Resources
+all: Warodai.plist Resources OtherResources
 	"$(DICT_BUILD_TOOL_BIN)/build_dict.sh" $(DICT_BUILD_OPTS) $(DICT_NAME) $(DICT_SRC_PATH) $(CSS_PATH) $(PLIST_PATH)
 	echo "Done."
 
-Resources:
+OtherResources: Resources/*
 	cp -R Resources OtherResources
 	echo "Copied Resources."
 
-Warodai.plist:
+Warodai.plist: Warodai.plist.in
 	cat Warodai.plist.in | m4 -DYEAR=$(date +%Y) -DVERSION_DATE=$(date +%Y.%m.%d) > Warodai.plist
 
 install:

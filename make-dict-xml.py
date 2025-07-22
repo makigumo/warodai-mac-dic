@@ -78,6 +78,7 @@ def get_entry_xml(title: str | list[str],
         {"\n        ".join(index_xml)}
         <div class="entry">
         {titleline}
+        <div class="link"><a href="https://warodai.ru/lookup/index.php#{file_id}">Warodai-Link</a></div>
         {f'''<p class="domain">[{domain}]</p>''' if domain else ""}
         <p>{content}</p>
         </div>
@@ -167,7 +168,11 @@ def get_entry_xml_from(path: str) -> str:
                 if len(kanjis_split) > len(transcriptions_split):
                     transcriptions_split = [transcriptions_split[0]] * len(kanjis_split)
 
-                titles = [f"{hiraganas_split[i]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
+                if len(hiraganas_split) == 1:
+                    titles = [f"{hiraganas_split[0]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
+                else:
+                    titles = [f"{hiraganas_split[i]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
+
                 index_xml = set()
                 for hiragana in hiraganas_split:
                     for kanji in kanjis_split:

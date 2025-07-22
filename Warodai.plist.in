@@ -29,14 +29,19 @@
         </array>
         <key>DCSDictionaryPrimaryLanguage</key>
         <string>ru</string>
+        <key>DCSDictionaryDefaultPrefs</key>
+        <dict>
+            <key>display-warodailink</key>
+            <string></string>
+            <key>version</key>
+            <string>1</string>
+        </dict>
+        <key>DCSDictionaryPrefsHTML</key>
+        <string>prefs.xhtml</string>
+        <key>DCSDictionaryXSL</key>
+        <string>pref.xslt</string>
         <key>DCSElementXPath</key>
         <dict>
-            <key>pos</key>
-            <string>//span[contains(@class,&quot;pos&quot;)][1]</string>
-            <key>pronunciation</key>
-            <string>//h2[1]</string>
-            <key>definitions</key>
-            <string>//*[contains(@class,&quot;senses&quot;)][1]</string>
         </dict>
         <key>DCSDictionaryUseSystemAppearance</key>
         <true/>
