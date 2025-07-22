@@ -46,4 +46,5 @@ jobs:
         tag: ${{ steps.date.outputs.date }}
         artifacts: ./Warodai.dmg
         artifactContentType: application/x-apple-diskimage
+        allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
