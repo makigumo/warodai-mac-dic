@@ -105,7 +105,7 @@ def katakana_to_hiragana(text: str) -> str:
 
 def get_entry_xml_from(path: str) -> str:
     file_id = pathlib.Path(path).stem
-    with io.open(path, mode='r', encoding='utf-8') as f:
+    with (io.open(path, mode='r', encoding='utf-8') as f):
         lines = f.readlines()
         # とうきょう【東京】(То:кё:) [геогр.]〔005-28-71〕
         # リューチューとう【リューチュー島･琉球島】(Рю:тю:-то:) [геогр.]〔008-71-42〕
@@ -126,9 +126,11 @@ def get_entry_xml_from(path: str) -> str:
             if len(kanjis_split) > len(transcriptions_split):
                 transcriptions_split = [transcriptions_split[0]] * len(kanjis_split)
 
-            hiraganas_extended = [x for xs in
-                                  ([h, katakana_to_hiragana(h)] if contains_katakana(h) else h for h in hiraganas_split)
-                                  for x in xs]
+            hiraganas_extended = set()
+            for x in hiraganas_split:
+                hiraganas_extended.add(x)
+                if contains_katakana(x):
+                    hiraganas_extended.add(katakana_to_hiragana(x))
 
             titles = [f"{hiraganas_split[i]}【{kanjis_split[i]}】" for i in range(len(kanjis_split))]
             index_xml = set()
